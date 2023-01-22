@@ -56,6 +56,10 @@ function App() {
   };
 
   const onCrash = () => {
+    if (!position) {
+      return;
+    }
+
     setType("crash");
     if (speed > 30) {
       sendCrashMessage();
@@ -72,11 +76,13 @@ function App() {
       <div>
         <b>Speed:</b> {speed} kmph
       </div>
-      {position && (
+      {position ? (
         <div style={{ margin: 20 }}>
           <b>Location:</b> {position.latitude.toFixed(2)},{" "}
           {position.longitude.toFixed(2)}
         </div>
+      ) : (
+        <div style={{ margin: 20 }}>Waiting for Location</div>
       )}
       <button style={buttonStyle} onClick={onStart}>
         Start
