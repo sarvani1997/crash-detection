@@ -62,7 +62,7 @@ function App() {
 
     setType("crash");
     if (speed > 30) {
-      sendCrashMessage();
+      sendCrashMessage(position);
     }
   };
 
