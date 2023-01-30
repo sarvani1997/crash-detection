@@ -9,10 +9,13 @@ const sendCrashMessage = async (position) => {
   });
 };
 
-function App() {
+function CrashDetector() {
   const [speed, setSpeed] = useState(0);
   const [type, setType] = useState("stop");
   const [position, setPostion] = useState();
+  const [startDisable, setStartDisable] = useState(false);
+  const [crashDisable, setCrashDisable] = useState(false);
+  const [stopDisable, setStopDisable] = useState(false);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(async (position) => {
@@ -38,14 +41,32 @@ function App() {
         );
       }, 400);
     }
+
+    if (type === "stop") {
+      setCrashDisable(true);
+      setStopDisable(true);
+      setStartDisable(false);
+    }
+
     if (type === "crash") {
       setSpeed(0);
+      setCrashDisable(true);
+      setStopDisable(true);
+      setStartDisable(true);
+    }
+
+    if (type === "start") {
+      setStartDisable(true);
+      setCrashDisable(false);
+      setStopDisable(false);
     }
 
     return () => {
       clearInterval(id);
     };
   }, [type]);
+
+  console.log("type--------->", type);
 
   const onStart = () => {
     setType("start");
@@ -84,17 +105,17 @@ function App() {
       ) : (
         <div style={{ margin: 20 }}>Waiting for Location</div>
       )}
-      <button style={buttonStyle} onClick={onStart}>
+      <button disabled={startDisable} style={buttonStyle} onClick={onStart}>
         Start
       </button>
-      <button style={buttonStyle} onClick={onCrash}>
+      <button disabled={crashDisable} style={buttonStyle} onClick={onCrash}>
         Crash
       </button>
-      <button style={buttonStyle} onClick={onStop}>
+      <button disabled={stopDisable} style={buttonStyle} onClick={onStop}>
         Stop
       </button>
     </main>
   );
 }
 
-export default App;
+export default CrashDetector;
