@@ -5,7 +5,7 @@ import axios from "axios";
 function HeartMonitoring() {
   const [heartRate, setHeartRate] = useState(70);
   const [type, setType] = useState("neutral");
-  const [msgSent, setMsgSent] = useState(false)
+  const [msgSent, setMsgSent] = useState(false);
 
   const sendMsg = async () => {
     await axios.post(`https://webapi.sweettree.org/send_heartfail_msg`, {});
@@ -14,12 +14,12 @@ function HeartMonitoring() {
   useEffect(() => {
     if (heartRate === 145) {
       console.log("high Heart rate");
-      setMsgSent(true)
+      setMsgSent(true);
       sendMsg();
     }
     if (heartRate === 45) {
       console.log("low Heart rate");
-      setMsgSent(true)
+      setMsgSent(true);
       sendMsg();
     }
     let id;
@@ -83,26 +83,26 @@ function HeartMonitoring() {
   return (
     <main>
       <h1>Heart Failure detection</h1>
-      {msgSent ? 
-      <h3>Heart Failure --- Message Sent</h3> :
-      <div>
+      {msgSent ? (
+        <h3>Health Emergency --- Message Sent</h3>
+      ) : (
         <div>
-        <b>Heart Rate:</b> {heartRate} bpm
-      </div>
+          <div>
+            <b>Heart Rate:</b> {heartRate} bpm
+          </div>
 
-      <button style={buttonStyle} onClick={onPause}>
-        Pause
-      </button>
-      <button style={buttonStyle} onClick={onIncrease}>
-        Increase
-      </button>
+          <button style={buttonStyle} onClick={onPause}>
+            Pause
+          </button>
+          <button style={buttonStyle} onClick={onIncrease}>
+            Increase
+          </button>
 
-      <button style={buttonStyle} onClick={onDecrease}>
-        Decrease
-      </button>
-      </div> 
-      }
-     
+          <button style={buttonStyle} onClick={onDecrease}>
+            Decrease
+          </button>
+        </div>
+      )}
     </main>
   );
 }
