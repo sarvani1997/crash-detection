@@ -2,25 +2,40 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
 
+const sendMsg = async (position) => {
+  await axios.post(`https://webapi.sweettree.org/send_heartfail_msg`, {
+    latitude: position.latitude,
+    longitude: position.longitude,
+  });
+};
 function HeartMonitoring() {
   const [heartRate, setHeartRate] = useState(70);
   const [type, setType] = useState("neutral");
+  const [position, setPostion] = useState();
   const [msgSent, setMsgSent] = useState(false);
 
-  const sendMsg = async () => {
-    await axios.post(`https://webapi.sweettree.org/send_heartfail_msg`, {});
-  };
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      setPostion(position.coords);
+    });
+  }, []);
 
   useEffect(() => {
     if (heartRate === 145) {
       console.log("high Heart rate");
       setMsgSent(true);
-      sendMsg();
+      if (!position) {
+        return;
+      }
+      sendMsg(position);
     }
     if (heartRate === 45) {
       console.log("low Heart rate");
       setMsgSent(true);
-      sendMsg();
+      if (!position) {
+        return;
+      }
+      sendMsg(position);
     }
     let id;
     if (type === "neutral") {
@@ -83,6 +98,14 @@ function HeartMonitoring() {
   return (
     <main>
       <h1>Heart Failure detection</h1>
+      {position ? (
+        <div style={{ margin: 20 }}>
+          <b>Location:</b> {position.latitude.toFixed(2)},{" "}
+          {position.longitude.toFixed(2)}
+        </div>
+      ) : (
+        <div style={{ margin: 20 }}>Waiting for Location</div>
+      )}
       {msgSent ? (
         <h3>Health Emergency --- Message Sent</h3>
       ) : (
@@ -91,15 +114,14 @@ function HeartMonitoring() {
             <b>Heart Rate:</b> {heartRate} bpm
           </div>
 
-          <button style={buttonStyle} onClick={onPause}>
-            Pause
+          <button style={buttonStyle} onClick={onDecrease}>
+            Decrease
           </button>
           <button style={buttonStyle} onClick={onIncrease}>
             Increase
           </button>
-
-          <button style={buttonStyle} onClick={onDecrease}>
-            Decrease
+          <button style={buttonStyle} onClick={onPause}>
+            Pause
           </button>
         </div>
       )}

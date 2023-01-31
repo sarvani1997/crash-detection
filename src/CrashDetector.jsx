@@ -66,8 +66,6 @@ function CrashDetector() {
     };
   }, [type]);
 
-  console.log("type--------->", type);
-
   const onStart = () => {
     setType("start");
   };
