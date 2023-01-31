@@ -10,25 +10,14 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-light">
       <div className="container-fluid">
-        <a className="navbar-brand color" href="/">
-          Alerts
-        </a>
-        <ul className="nav justify-content-end">
+        <ul className="navbar-nav">
           <li className="nav-item">
-            <Link
-              className="nav-link color"
-              aria-current="page"
-              to="/crash_detector"
-            >
+            <Link className="nav-link" aria-current="page" to="/crash_detector">
               Crash Detector
             </Link>
           </li>
           <li className="nav-item">
-            <Link
-              className="nav-link color"
-              aria-current="page"
-              to="/heart_monitor"
-            >
+            <Link className="nav-link" aria-current="page" to="/heart_monitor">
               Heart Monitor
             </Link>
           </li>
